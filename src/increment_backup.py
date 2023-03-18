@@ -3,10 +3,12 @@ import ftplib
 import os
 import os.path as osp
 import yaml
+import subprocess
 from glob import glob
 
 from ftplib import FTP_TLS
 from omegaconf import DictConfig
+from tendo import singleton
 
 
 class IncrementBackup:
@@ -23,12 +25,18 @@ class IncrementBackup:
         self._modify_dict = None
 
     def run(self):
+        # prevents multiple process working on the same backup
+        # only one instance of the program can run at a time
+        me = singleton.SingleInstance()
+
         if self.archive_needed():
             self.archive_workdir()
             
         self.download_folder(self.cfg.ftp.src_folder, self.savedir, self.ftp, self.modify_dict)
         with open(self.modify_yaml, "w") as f:
             yaml.safe_dump(self.modify_dict, f)
+
+        print("SUCCESS!!")
 
     def archive_needed(self):
         backup_folders = glob(osp.join(self.workdir, "backup_*"))
@@ -41,7 +49,20 @@ class IncrementBackup:
         return backup_cnt >= backup_threshold
 
     def archive_workdir(self):
-        raise NotImplementedError
+        all_backups = glob(osp.join(self.workdir, "backup_*"))
+        all_backups.sort()
+        lastest_backup = osp.basename(all_backups[-1]).split("backup_")[-1]
+        save_name = f"backup_until_{lastest_backup}.tar.gz"
+        cmd_tar = f"tar -cavf {save_name} {self.workdir}"
+        cmd_mv = f"mv {save_name} {self.cfg.archive_root}"
+        cmd_rm = f"rm -r {self.workdir}"
+        print(f"compressing working directory as {save_name}...")
+        subprocess.run(cmd_tar, shell=True, check=True)
+        print(f"moving compressed file {save_name} to {self.cfg.archive_root}")
+        subprocess.run(cmd_mv, shell=True, check=True)
+        print("removing current work dir...")
+        subprocess.run(cmd_rm, shell=True, check=True)
+        print("achive work dir complete!")
 
     def download_folder(self, src, dst, ftp: ftplib.FTP, modify_dict):
         #path & destination are str of the form "/dir/folder/something/"
