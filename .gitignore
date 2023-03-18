@@ -1,5 +1,5 @@
 /workdir
 /outputs
-/conf
+/conf/config.yaml
 __pycache__
 /run_backup.log

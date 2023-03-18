@@ -1,0 +1,11 @@
+ftp:
+  connect:
+    host: "bisecthosting.com"
+    port: 99
+  login:
+    user: "carrot_of_rivia.999"
+    passwd: "password"
+  src_folder: "/"
+workdir: "./workdir"
+backup_threshold: "24*7"
+archive_root: "/media/Element/MCServerBackup"
