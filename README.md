@@ -1,9 +1,9 @@
 # Incremental Backup Minecraft Server Using FTPS
 
 ## Motivation
-As the owner of a personal Minecraft server, I once woke up to find that someone had destroyed my entire base overnight. I was frustrated to discover that the automatic backup provided by the service of my server only ran once a day, meaning that I had lost hours of progress since the last backup.
+As the owner of a personal Minecraft server, I once woke up to find that someone had destroyed my entire base overnight. I was frustrated to discover that the automatic backup by my service provider only ran once a day, meaning that I had lost hours of progress since the last backup.
 
-That's when it hit me - what if I could set up a more frequent backup schedule? And luckily, my servise offers a FTPS interface which makes it possible for me to interact with server files directly through scripts. Combined with incremental backup stratege, I can backup my server every hour without worrying about running out of storage space.
+That's when it hit me - what if I could set up a more frequent backup schedule? And luckily, my servise offers a FTPS interface which makes it possible for me to interact with server files directly through scripts. Combined with incremental backup strategy, I can backup my server every hour without worrying about running out of storage space.
 
 ## Implementation
 I used the [`ftplib`](https://docs.python.org/3/library/ftplib.html) package in Python to transfer files between my server and local machine. Here's an overview:
