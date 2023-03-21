@@ -3,7 +3,7 @@ ftp:
     host: "bisecthosting.com"
     port: 99
   login:
-    user: "carrot_of_rivia.999"
+    user: "user"
     passwd: "password"
   src_folder: "/"
 workdir: "./workdir"
